@@ -340,7 +340,7 @@ a { color: inherit; }
 .vp-title, .wk-th, .wk-cell, .cc-cat,
 .dorm-note, .cert-title, .coach-role,
 .faq summary, .contact-box h2, .contact-box h3, .pcard h3,
-.fb-title, .fb-text, .gd-tag {
+.fb-title, .fb-text {
   word-break: keep-all;
   overflow-wrap: break-word;
 }
@@ -1316,9 +1316,7 @@ body { line-break: strict; }
 .gd[open] { box-shadow: 0 10px 28px rgba(6, 24, 47, .08); }
 .gd summary {
   position: relative;
-  display: grid;
-  gap: 3px;
-  padding: 18px 56px 18px 22px;
+  padding: 20px 56px 20px 22px;
   cursor: pointer;
   list-style: none;
 }
@@ -1341,7 +1339,6 @@ body { line-break: strict; }
   letter-spacing: .05em;
   color: var(--navy-900);
 }
-.gd-tag { font-size: .86rem; color: var(--ink-soft); }
 
 .gd-body {
   display: grid;
