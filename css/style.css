@@ -2134,6 +2134,15 @@ body { line-break: strict; }
 /* url() を含むカスタムプロパティは、変数を使う側（このCSS）を基準に
    解決されるため、パスはここで持つ */
 .es-1 { --shot: url("../images/facility/pool.jpg"); }
+/* 元写真は正方形。他と同じ帯の高さだと中央の細い一帯しか映らず、
+   プールだと分かりにくいので、ここだけ高くして天井〜レーンまで見せる */
+.es-1 { min-height: clamp(340px, 52vw, 580px); }
+.es-1 .es-bg {
+  background-image:
+    linear-gradient(180deg, rgba(6,24,47,0) 0%, rgba(6,24,47,.1) 50%, rgba(6,24,47,.88) 100%),
+    var(--shot);
+  background-position: 50% 56%;
+}
 .es-2 { --shot: url("../images/facility/startblock.jpg"); }
 /* 帯状に切り取られるので、選手が入る位置に寄せる */
 .es-3 { --shot: url("../images/facility/gym-training.jpg"); }
@@ -2173,11 +2182,13 @@ body { line-break: strict; }
 
 @media (max-width: 780px) {
   .es { min-height: 260px; }
+  .es-1 { min-height: 340px; }
   .es-body { padding: 28px 22px 24px; }
   .es-text { font-size: .86rem; line-height: 1.9; }
 }
 @media (max-width: 420px) {
   .es { min-height: 230px; }
+  .es-1 { min-height: 320px; }
   .es-body { padding: 24px 18px 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
