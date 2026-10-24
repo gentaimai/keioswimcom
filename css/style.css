@@ -32,7 +32,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 76px;
+  scroll-padding-top: calc(76px + env(safe-area-inset-top, 0px));
   /* iOS Safari が狭いカラム内で文字を勝手に拡大し、
      レイアウトが崩れるのを防ぐ */
   -webkit-text-size-adjust: 100%;
@@ -85,6 +85,12 @@ a { color: inherit; }
   top: 0;
   z-index: 100;
   background: #fff;
+  /* iPhone のステータスバー（時刻・ノッチ部分）まで紺色で塗り、
+     白い余白に見えないようにする。safe-area が無い端末では 0 なので変化なし */
+  background: linear-gradient(to bottom,
+    var(--navy-900) env(safe-area-inset-top, 0px),
+    #fff env(safe-area-inset-top, 0px));
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) 0 env(safe-area-inset-left, 0px);
   border-bottom: 0;
 }
 .nav-inner {
@@ -1586,7 +1592,7 @@ body { line-break: strict; }
 .site-footer {
   background: var(--navy-900);
   color: rgba(255,255,255,.72);
-  padding: 54px 0 40px;
+  padding: 54px 0 calc(40px + env(safe-area-inset-bottom, 0px));
 }
 .footer-inner { display: grid; gap: 26px; }
 .footer-name { margin: 0 0 4px; color: #fff; font-weight: 700; font-size: .96rem; }
@@ -2792,7 +2798,7 @@ body { line-break: strict; }
 
   .nav {
     position: fixed;
-    inset: 68px 0 auto 0;
+    inset: calc(68px + env(safe-area-inset-top, 0px)) 0 auto 0;
     flex-direction: column;
     align-items: stretch;
     gap: 0;
@@ -2800,7 +2806,9 @@ body { line-break: strict; }
     background: #fff;
     border-bottom: 1px solid var(--line);
     padding: 8px 0 20px;
-    transform: translateY(-125%);
+    /* 閉じている間は画面の上へ完全に逃がす。
+       ノッチ分だけ下がった位置から -125% では、最後のリンクが帯に残って見えるため */
+    transform: translateY(calc(-100% - 68px - env(safe-area-inset-top, 0px) - 12px));
     transition: transform .32s ease;
     box-shadow: 0 20px 40px rgba(6, 24, 47, .12);
   }
