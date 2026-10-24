@@ -38,6 +38,7 @@ TARGETS = [
     "dorm-note", "routes-title", "adm-name", "adm-title",
     "footer-name", "contact-box-h", "cc-cat",
     "fb-title", "fb-text",
+    "gd-tag",
 ]
 # クラスを持たない要素も対象にする（タグ名で指定）
 TAG_TARGETS = [

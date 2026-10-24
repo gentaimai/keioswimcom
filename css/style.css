@@ -334,7 +334,7 @@ a { color: inherit; }
 .vp-title, .wk-th, .wk-cell, .cc-cat,
 .dorm-note, .cert-title, .coach-role,
 .faq summary, .contact-box h2, .contact-box h3, .pcard h3,
-.fb-title, .fb-text {
+.fb-title, .fb-text, .gd-tag {
   word-break: keep-all;
   overflow-wrap: break-word;
 }
@@ -1295,6 +1295,148 @@ body { line-break: strict; }
   .pdf-text { font-size: .94rem; }
   /* 矢印は文言の下に回して、狭い幅でも文字が潰れないようにする */
   .pdf-arrow { grid-column: 2; justify-self: end; }
+}
+
+/* 学部別の入試ガイド（押すと開く）。左の帯はガイドブックの学部カラー */
+.gd-list { display: grid; gap: 12px; }
+.gd {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--fc, var(--navy-800));
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: box-shadow .2s;
+}
+.gd[open] { box-shadow: 0 10px 28px rgba(6, 24, 47, .08); }
+.gd summary {
+  position: relative;
+  display: grid;
+  gap: 3px;
+  padding: 18px 56px 18px 22px;
+  cursor: pointer;
+  list-style: none;
+}
+.gd summary::-webkit-details-marker { display: none; }
+.gd summary::after {
+  content: "";
+  position: absolute;
+  right: 26px; top: 50%;
+  width: 10px; height: 10px;
+  border-right: 2px solid var(--red);
+  border-bottom: 2px solid var(--red);
+  transform: translateY(-70%) rotate(45deg);
+  transition: transform .25s;
+}
+.gd[open] summary::after { transform: translateY(-20%) rotate(-135deg); }
+.gd-name {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+  color: var(--navy-900);
+}
+.gd-tag { font-size: .86rem; color: var(--ink-soft); }
+
+.gd-body {
+  display: grid;
+  gap: 26px;
+  padding: 24px 24px 28px;
+  border-top: 1px solid var(--line);
+}
+.gd-h {
+  margin: 0 0 12px;
+  padding-left: 10px;
+  border-left: 4px solid var(--fc, var(--navy-800));
+  font-size: .92rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  line-height: 1.4;
+  color: var(--navy-900);
+}
+.gd-p { margin: 0 0 14px; font-size: .9rem; color: var(--ink-soft); text-wrap: pretty; }
+.gd-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 0; }
+.gd-facts > div { padding: 10px 14px; background: var(--bg-tint); border-radius: var(--radius); }
+.gd-facts dt { margin: 0 0 2px; font-size: .72rem; font-weight: 700; letter-spacing: .08em; color: var(--ink-soft); }
+.gd-facts dd { margin: 0; font-size: .86rem; font-weight: 700; color: var(--ink); }
+
+.gd-routes, .gd-subj { margin: 0; padding: 0; list-style: none; }
+.gd-routes li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 18px;
+  padding: 12px 0;
+  border-top: 1px dashed var(--line);
+}
+.gd-routes li:first-child { border-top: 0; padding-top: 0; }
+.gr-name { font-size: .92rem; font-weight: 700; color: var(--navy-900); }
+.gr-name small {
+  display: inline-block;
+  margin-left: .6em;
+  padding: 1px 9px;
+  border-radius: 99px;
+  background: var(--blue-100);
+  color: var(--blue-600);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  vertical-align: .1em;
+}
+.gr-n { max-width: 19em; font-size: .88rem; font-weight: 700; color: var(--red); text-align: right; }
+.gr-d { grid-column: 1 / -1; font-size: .84rem; color: var(--ink-soft); text-wrap: pretty; }
+
+.gd-sub {
+  margin: 14px 0 6px;
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--navy-800);
+}
+.gd-sub:first-of-type { margin-top: 0; }
+.gd-subj li {
+  display: grid;
+  grid-template-columns: 8.5em 3.6em minmax(0, 1fr);
+  gap: 4px 12px;
+  align-items: baseline;
+  padding: 10px 0;
+  border-top: 1px dashed var(--line);
+}
+.gd-subj li:first-child { border-top: 0; }
+.gd-subj li.is-sub { padding: 5px 0 5px 1.4em; border-top: 0; }
+.gs-name { font-size: .9rem; font-weight: 700; color: var(--navy-900); }
+.gs-pt { font-size: .86rem; font-weight: 700; color: var(--red); }
+.gs-d { font-size: .84rem; color: var(--ink-soft); text-wrap: pretty; }
+.gd-note { margin: 8px 0 0; font-size: .82rem; color: var(--ink-soft); }
+.gd-second {
+  display: inline-block;
+  margin: 12px 0 0;
+  padding: 4px 12px;
+  border-radius: 99px;
+  background: var(--bg-tint);
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--navy-800);
+}
+.gd-foot { margin: 16px 0 0; }
+.gd-pdf-lead {
+  margin: 40px 0 14px;
+  font-size: .92rem;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 640px) {
+  .gd summary { padding: 16px 48px 16px 16px; }
+  .gd summary::after { right: 20px; }
+  .gd-body { padding: 20px 16px 24px; }
+  /* 3項目を縦に積むと長くなるので、ラベルと値を1行にまとめる */
+  .gd-facts { grid-template-columns: 1fr; gap: 6px; }
+  .gd-facts > div { display: flex; gap: 12px; align-items: baseline; padding: 8px 12px; }
+  .gd-facts dt { flex: 0 0 6em; margin: 0; }
+  .gd-routes li { grid-template-columns: minmax(0, 1fr); }
+  .gr-n { max-width: none; text-align: left; }
+  .gd-subj li { grid-template-columns: minmax(0, 1fr) auto; }
+  .gd-subj li.is-sub { grid-template-columns: minmax(0, 1fr); padding-left: 1em; }
+  .gd-subj li.is-sub .gs-pt { display: none; }
+  .gs-d { grid-column: 1 / -1; }
 }
 
 .contact-box {
