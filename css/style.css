@@ -2340,6 +2340,48 @@ body { line-break: strict; }
   .es-bg, .es:hover .es-bg { transition: none; transform: none; }
 }
 
+/* アクセスマップ（日吉周辺／4キャンパスをタブで切り替える略図） */
+.am { max-width: 520px; margin: 56px auto 0; }
+.am-title {
+  margin: 0 0 16px;
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 4.4vw, 1.35rem);
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: .03em;
+  color: var(--navy-900);
+  text-align: center;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.am-tabs { display: flex; gap: 8px; margin: 0 0 12px; }
+.am-tab {
+  flex: 1;
+  padding: 11px 0;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  background: #fff;
+  font: inherit;
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.am-tab:hover { border-color: var(--blue-600); }
+.am-tab.is-on { background: var(--navy-800); border-color: var(--navy-800); color: #fff; }
+.am-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.am-card[hidden] { display: none; }
+.am-card svg { display: block; width: 100%; height: auto; }
+.am-card svg text { font-family: var(--font-sans); }
+.am-note { margin: 12px 2px 0; font-size: .78rem; line-height: 1.7; color: var(--ink-soft); }
+.am-fallback { margin: 12px 0 0; padding-left: 1.2em; font-size: .9rem; }
+
 /* ============================================================
    部員構成データ
    ============================================================ */
