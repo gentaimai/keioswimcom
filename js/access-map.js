@@ -1,4 +1,4 @@
-// ---- アクセスマップ（「日吉周辺」と「4キャンパス」をタブで切り替える略図） ----
+// ---- キャンパスアクセスマップ（4キャンパスの路線図 → 押すと日吉へズームして日吉周辺の略図に切り替わる） ----
 // 実際の地図をもとにした略図で、外部の地図サービスは使わない（SVG を自前で描く）。
 // 道路・鉄道・校地・海岸線・多摩川は OpenStreetMap をもとに間引いたデータ。
 // 図①：日吉駅・協生館・日吉キャンパス・矢上キャンパス・水泳部寮の位置関係
@@ -57,10 +57,10 @@
 
   // ================== 図①：日吉周辺 ==================
   function figHiyoshi() {
-    // 390 x 470 の図。1m あたり 0.40px。日吉駅が左端に寄るように置く。
-    var P = { W: 390, H: 470, s: 0.40 };
+    // 390 x 500 の図（図②と同じ大きさ）。1m あたり 0.40px。日吉駅が左端に寄るように置く。
+    var P = { W: 390, H: 500, s: 0.40 };
     P.lon0 = 139.64668 - 26 / (M_LON * P.s);
-    P.lat1 = 35.5535 + 235 / (M_LAT * P.s);
+    P.lat1 = 35.5535 + 250 / (M_LAT * P.s);
     var g = OSM.g, o = [];
     function dxy(lon, lat) { return [(lon - P.lon0) * M_LON * P.s, (P.lat1 - lat) * M_LAT * P.s]; }
     function osmPath(arrs) {
@@ -167,37 +167,86 @@
     o.push(dot(A['SFC'], 5, '#0a2545', '#fff', 2));
     o.push(pill(A['SFC'][0] + 20, A['SFC'][1] + 20, 'バス', { fs: 11.5, fill: '#fff', stroke: '#8a97a3', sw: 1.4, color: '#4c5b6b', px: 8, h: 20 }));
     o.push(pill(A['SFC'][0] - 6, A['SFC'][1] + 46, '湘南藤沢キャンパス（SFC）', { fs: 13, fill: '#0a2545', color: '#fff', px: 11, h: 26, anchor: 'start' }));
-    // 日吉キャンパス：赤く大きく
+    // 日吉キャンパス：赤く大きなボタン（押すと日吉へズームする）
     o.push(dot(h, 9, RED, '#fff', 3));
     var hw = Math.ceil(Math.max(tw('日吉キャンパス', 15), tw('プール・寮・矢上キャンパス', 11.5)) + 26), hx0 = h[0] - 14 - hw, hy0 = h[1] - 66;
-    o.push('<rect x="' + hx0.toFixed(1) + '" y="' + hy0 + '" width="' + hw + '" height="46" rx="23" fill="' + RED + '"/>' +
+    o.push('<g class="am-hub" role="button" tabindex="0" aria-label="日吉キャンパスのアクセスマップを見る" data-cx="' + h[0].toFixed(1) + '" data-cy="' + h[1].toFixed(1) + '">' +
+      '<rect class="am-pulse" x="' + hx0.toFixed(1) + '" y="' + hy0 + '" width="' + hw + '" height="46" rx="23" fill="' + RED + '"/>' +
+      '<rect class="am-hub-bg" x="' + hx0.toFixed(1) + '" y="' + hy0 + '" width="' + hw + '" height="46" rx="23" fill="' + RED + '"/>' +
       '<text x="' + (hx0 + hw / 2).toFixed(1) + '" y="' + (hy0 + 21) + '" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">日吉キャンパス</text>' +
-      '<text x="' + (hx0 + hw / 2).toFixed(1) + '" y="' + (hy0 + 37) + '" font-size="11.5" font-weight="700" fill="#fff" text-anchor="middle" opacity=".92">プール・寮・矢上キャンパス</text>');
+      '<text x="' + (hx0 + hw / 2).toFixed(1) + '" y="' + (hy0 + 37) + '" font-size="11.5" font-weight="700" fill="#fff" text-anchor="middle" opacity=".92">プール・寮・矢上キャンパス</text>' +
+      '<g class="am-tap"><circle cx="' + (hx0 + hw - 6).toFixed(1) + '" cy="' + (hy0 + 46) + '" r="11" fill="#fff" stroke="' + RED + '" stroke-width="2"/>' +
+      '<path d="M' + (hx0 + hw - 11).toFixed(1) + ' ' + (hy0 + 46) + ' h10 M' + (hx0 + hw - 6).toFixed(1) + ' ' + (hy0 + 41) + ' v10" stroke="' + RED + '" stroke-width="2.2" stroke-linecap="round"/></g>' +
+      '</g>');
 
     return '<svg viewBox="0 0 ' + P.W + ' ' + P.H + '" role="img" aria-label="東京と横浜のあいだにある日吉キャンパスから、渋谷・横浜・三田キャンパス・湘南台（湘南藤沢キャンパス）へ乗り換えなしで行けることを示す路線図">' + o.join('') + '</svg>';
   }
 
-  // ================== タブの切り替え ==================
-  var TTL = {
-    1: '駅から協生館まで、<wbr>徒歩1分。<br>寮もキャンパスも、<wbr>日吉駅から<wbr>徒歩圏内。',
-    2: '日吉は、<wbr>東京と横浜の<wbr>あいだ。<br>三田・湘南台へも<wbr>乗り換えなし。'
-  };
-  var cards = { 1: root.querySelector('[data-fig="1"]'), 2: root.querySelector('[data-fig="2"]') };
-  var title = root.querySelector('[data-am="title"]');
-  var tabs = [].slice.call(root.querySelectorAll('.am-tab'));
-  var drawn = {};
+  // ================== ズームの切り替え ==================
+  // 最初は図②（4キャンパス）を出す。赤い「日吉キャンパス」を押すと、日吉へズームして図①に切り替わる。
+  var card = root.querySelector('.am-card');
+  var fig1 = root.querySelector('[data-fig="1"]'), fig2 = root.querySelector('[data-fig="2"]');
+  var back = root.querySelector('.am-back');
+  fig2.innerHTML = figCampuses();
+  fig1.innerHTML = figHiyoshi();
+  var svg2 = fig2.querySelector('svg'), hub = svg2.querySelector('.am-hub');
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function show(t) {
-    if (!drawn[t]) { cards[t].innerHTML = t === '1' ? figHiyoshi() : figCampuses(); drawn[t] = true; }
-    title.innerHTML = TTL[t];
-    cards['1'].hidden = t !== '1';
-    cards['2'].hidden = t !== '2';
-    tabs.forEach(function (b) {
-      var on = b.dataset.t === t;
-      b.classList.toggle('is-on', on);
-      b.setAttribute('aria-pressed', String(on));
-    });
+  var FULL = [0, 0, 390, 500];
+  var cx = +hub.dataset.cx, cy = +hub.dataset.cy, zw = 390 / 7, zh = 500 / 7;
+  var ZOOM = [cx - zw / 2, cy - zh / 2, zw, zh];
+  var raf = 0, timer = 0, view = 'campuses';
+
+  function setVB(v) { svg2.setAttribute('viewBox', v.map(function (n) { return n.toFixed(3); }).join(' ')); }
+  // 拡大率が一定に感じられるよう、幅は対数で補間し、中心は拡大率に合わせて動かす
+  function lerpVB(a, b, e) {
+    var s0 = 1 / a[2], s1 = 1 / b[2];
+    var s = s0 * Math.pow(s1 / s0, e), u = (s - s0) / (s1 - s0);
+    var w = 1 / s, h = w * (a[3] / a[2]);
+    var x = (a[0] + a[2] / 2) + ((b[0] + b[2] / 2) - (a[0] + a[2] / 2)) * u;
+    var y = (a[1] + a[3] / 2) + ((b[1] + b[3] / 2) - (a[1] + a[3] / 2)) * u;
+    return [x - w / 2, y - h / 2, w, h];
   }
-  tabs.forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.t); }); });
-  show('1');
+  function animate(from, to, dur, done) {
+    cancelAnimationFrame(raf);
+    var t0 = null;
+    function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+    function step(ts) {
+      if (t0 === null) t0 = ts;
+      var p = Math.min((ts - t0) / dur, 1);
+      setVB(p < 1 ? lerpVB(from, to, ease(p)) : to);
+      if (p < 1) raf = requestAnimationFrame(step); else if (done) done();
+    }
+    raf = requestAnimationFrame(step);
+  }
+  function setView(v) {
+    view = v;
+    card.dataset.view = v;
+    back.hidden = v !== 'hiyoshi';
+    hub.setAttribute('tabindex', v === 'campuses' ? '0' : '-1');
+  }
+
+  function zoomIn() {
+    if (view !== 'campuses') return;
+    clearTimeout(timer);
+    if (reduce) { setVB(ZOOM); setView('hiyoshi'); return; }
+    setView('zooming');
+    animate(FULL, ZOOM, 1300);
+    timer = setTimeout(function () { setView('hiyoshi'); }, 800);   // 拡大の途中で図①へ重ねて切り替える
+  }
+  function zoomOut() {
+    if (view !== 'hiyoshi') return;
+    clearTimeout(timer);
+    if (reduce) { setVB(FULL); setView('campuses'); return; }
+    setVB(ZOOM);                 // 拡大した状態の図②から、引いていく
+    setView('campuses');
+    animate(ZOOM, FULL, 1100);
+  }
+
+  hub.addEventListener('click', zoomIn);
+  hub.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); zoomIn(); }
+  });
+  back.addEventListener('click', zoomOut);
+  setView('campuses');
 })();
