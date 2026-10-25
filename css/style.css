@@ -2379,7 +2379,6 @@ body { line-break: strict; }
 .am-card[hidden] { display: none; }
 .am-card svg { display: block; width: 100%; height: auto; }
 .am-card svg text { font-family: var(--font-sans); }
-.am-note { margin: 12px 2px 0; font-size: .78rem; line-height: 1.7; color: var(--ink-soft); }
 .am-fallback { margin: 12px 0 0; padding-left: 1.2em; font-size: .9rem; }
 
 /* ============================================================

@@ -182,19 +182,14 @@
     1: '駅から協生館まで、<wbr>徒歩1分。<br>寮もキャンパスも、<wbr>日吉駅から<wbr>徒歩圏内。',
     2: '日吉は、<wbr>東京と横浜の<wbr>あいだ。<br>三田・湘南台へも<wbr>乗り換えなし。'
   };
-  var NOTE = {
-    1: '※ 実際の地図をもとにした略図です。時間は駅からの徒歩の目安です。',
-    2: '※ 位置関係を示す略図です。'
-  };
   var cards = { 1: root.querySelector('[data-fig="1"]'), 2: root.querySelector('[data-fig="2"]') };
-  var title = root.querySelector('[data-am="title"]'), note = root.querySelector('[data-am="note"]');
+  var title = root.querySelector('[data-am="title"]');
   var tabs = [].slice.call(root.querySelectorAll('.am-tab'));
   var drawn = {};
 
   function show(t) {
     if (!drawn[t]) { cards[t].innerHTML = t === '1' ? figHiyoshi() : figCampuses(); drawn[t] = true; }
     title.innerHTML = TTL[t];
-    note.textContent = NOTE[t];
     cards['1'].hidden = t !== '1';
     cards['2'].hidden = t !== '2';
     tabs.forEach(function (b) {
