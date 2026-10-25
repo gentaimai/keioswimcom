@@ -2404,6 +2404,12 @@ body { line-break: strict; }
   .am-fig { transition: none; }
 }
 .am-fallback { margin: 12px 0 0; padding-left: 1.2em; font-size: .9rem; }
+/* PC：横長の構図に切り替えて、ページの幅いっぱいに大きく見せる */
+@media (min-width: 820px) {
+  .am { max-width: 960px; }
+  .am-card { width: 100%; aspect-ratio: 1000 / 600; }
+  .am-back { top: 14px; left: 14px; padding: 10px 20px; font-size: .9rem; }
+}
 
 /* ============================================================
    部員構成データ
